@@ -1,0 +1,406 @@
+/* ============================================================
+   COE Zapopan — Design System
+   Coordinación Municipal de Protección Civil y Bomberos
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Variables de diseño ─────────────────────────────────── */
+:root {
+  /* Paleta institucional */
+  --rojo:          #dc2626;
+  --rojo-hover:    #b91c1c;
+  --rojo-suave:    rgba(220, 38, 38, 0.15);
+  --rojo-borde:    rgba(220, 38, 38, 0.4);
+  --maroon:        #3d1515;
+  --maroon-claro:  #5c2020;
+
+  /* Fondos */
+  --bg-base:       #0f0f0f;
+  --bg-surface:    #1a1a1a;
+  --bg-card:       #222222;
+  --bg-card-hover: #2a2a2a;
+  --bg-input:      #1e1e1e;
+  --bg-sidebar:    #141414;
+
+  /* Texto */
+  --texto:         #e5e5e5;
+  --texto-muted:   #9ca3af;
+  --texto-dim:     #6b7280;
+  --texto-blanco:  #ffffff;
+
+  /* Bordes */
+  --borde:         #2e2e2e;
+  --borde-suave:   #252525;
+  --borde-focus:   #dc2626;
+
+  /* Prioridades */
+  --critica:       #7c3aed;
+  --critica-bg:    rgba(124, 58, 237, 0.15);
+  --alta:          #dc2626;
+  --alta-bg:       rgba(220, 38, 38, 0.15);
+  --media:         #d97706;
+  --media-bg:      rgba(217, 119, 6, 0.15);
+  --baja:          #16a34a;
+  --baja-bg:       rgba(22, 163, 74, 0.15);
+
+  /* Estados de unidad */
+  --disponible:    #16a34a;
+  --en-camino:     #d97706;
+  --en-escena:     #dc2626;
+  --regresando:    #3b82f6;
+
+  /* Sombras */
+  --sombra-sm:     0 1px 3px rgba(0,0,0,0.5);
+  --sombra:        0 4px 16px rgba(0,0,0,0.6);
+  --sombra-lg:     0 8px 32px rgba(0,0,0,0.7);
+  --sombra-roja:   0 4px 24px rgba(220, 38, 38, 0.3);
+
+  /* Tipografía */
+  --fuente:        'Inter', system-ui, -apple-system, sans-serif;
+  --radio:         10px;
+  --radio-sm:      6px;
+  --radio-lg:      14px;
+  --radio-xl:      20px;
+
+  /* Transiciones */
+  --trans:         0.2s ease;
+  --trans-lenta:   0.35s ease;
+}
+
+/* ── Reset base ──────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--fuente);
+  background: var(--bg-base);
+  color: var(--texto);
+  min-height: 100vh;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Tipografía ──────────────────────────────────────────── */
+h1 { font-size: 1.75rem; font-weight: 700; color: var(--texto-blanco); letter-spacing: -0.5px; }
+h2 { font-size: 1.3rem;  font-weight: 600; color: var(--texto-blanco); }
+h3 { font-size: 1.05rem; font-weight: 600; color: var(--texto-blanco); }
+h4 { font-size: 0.9rem;  font-weight: 600; color: var(--texto); }
+p  { color: var(--texto-muted); line-height: 1.6; }
+
+/* ── Botones ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radio);
+  font-family: var(--fuente);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--trans);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primario {
+  background: var(--rojo);
+  color: #fff;
+}
+.btn-primario:hover {
+  background: var(--rojo-hover);
+  box-shadow: var(--sombra-roja);
+  transform: translateY(-1px);
+}
+
+.btn-secundario {
+  background: var(--bg-card);
+  color: var(--texto);
+  border: 1px solid var(--borde);
+}
+.btn-secundario:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--borde-focus);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--texto-muted);
+  border: 1px solid var(--borde);
+}
+.btn-ghost:hover {
+  color: var(--texto-blanco);
+  background: var(--bg-card);
+}
+
+.btn-icono {
+  background: transparent;
+  border: none;
+  color: var(--texto-muted);
+  padding: 8px;
+  border-radius: var(--radio-sm);
+  cursor: pointer;
+  transition: all var(--trans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-icono:hover {
+  color: var(--texto-blanco);
+  background: var(--bg-card);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Inputs / Formularios ────────────────────────────────── */
+.input, .select, .textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 0.875rem;
+  padding: 10px 14px;
+  transition: border-color var(--trans), box-shadow var(--trans);
+  outline: none;
+  appearance: none;
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: var(--texto-dim);
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--rojo);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.input-grupo {
+  position: relative;
+}
+.input-icono {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--texto-dim);
+  pointer-events: none;
+  font-size: 0.9rem;
+}
+.input-grupo .input {
+  padding-left: 38px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--texto-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.form-campo {
+  margin-bottom: 16px;
+}
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 20px;
+  transition: all var(--trans);
+}
+.card:hover {
+  border-color: #3e3e3e;
+}
+.card-accion {
+  cursor: pointer;
+}
+.card-accion:hover {
+  background: var(--bg-card-hover);
+  box-shadow: var(--sombra);
+}
+
+/* ── Chips de prioridad ──────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.chip-critica { background: var(--critica-bg); color: var(--critica); border: 1px solid rgba(124,58,237,0.3); }
+.chip-alta    { background: var(--alta-bg);    color: var(--alta);    border: 1px solid rgba(220,38,38,0.3); }
+.chip-media   { background: var(--media-bg);   color: var(--media);   border: 1px solid rgba(217,119,6,0.3); }
+.chip-baja    { background: var(--baja-bg);    color: var(--baja);    border: 1px solid rgba(22,163,74,0.3); }
+
+/* ── Dot de estado ───────────────────────────────────────── */
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.dot-verde    { background: var(--disponible); box-shadow: 0 0 6px rgba(22,163,74,0.6); }
+.dot-amarillo { background: var(--en-camino);  box-shadow: 0 0 6px rgba(217,119,6,0.6); }
+.dot-rojo     { background: var(--alta);       box-shadow: 0 0 6px rgba(220,38,38,0.6); }
+.dot-azul     { background: var(--regresando); box-shadow: 0 0 6px rgba(59,130,246,0.6); }
+
+/* ── Scrollbar custom ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: #3e3e3e; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* ── Utilidades ──────────────────────────────────────────── */
+.flex         { display: flex; }
+.flex-col     { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2  { gap: 8px; }
+.gap-3  { gap: 12px; }
+.gap-4  { gap: 16px; }
+.w-full { width: 100%; }
+.truncar {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.texto-muted  { color: var(--texto-muted); font-size: 0.82rem; }
+.texto-xs     { font-size: 0.75rem; }
+.texto-sm     { font-size: 0.85rem; }
+
+/* ── Animaciones ─────────────────────────────────────────── */
+@keyframes pulso {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animar-fade   { animation: fadeIn 0.3s ease; }
+.animar-slide  { animation: slideIn 0.25s ease; }
+.pulsando      { animation: pulso 1.5s ease-in-out infinite; }
+
+/* ── Overlay / Modal ─────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── Toast / Notificación ────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 14px 20px;
+  box-shadow: var(--sombra-lg);
+  animation: slideIn 0.25s ease;
+  max-width: 360px;
+}
+.toast-error  { border-left: 4px solid var(--rojo); }
+.toast-exito  { border-left: 4px solid var(--baja); }
+.toast-alerta { border-left: 4px solid var(--media); }
+
+/* ── Tabla base ──────────────────────────────────────────── */
+.tabla { width: 100%; border-collapse: collapse; }
+.tabla th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--texto-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--borde);
+}
+.tabla td {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--borde-suave);
+  color: var(--texto);
+}
+.tabla tr:hover td { background: var(--bg-card-hover); }
+.tabla tr:last-child td { border-bottom: none; }
+
+/* ── Divisor ─────────────────────────────────────────────── */
+.divisor {
+  border: none;
+  border-top: 1px solid var(--borde);
+  margin: 20px 0;
+}
+
+/* ── Utilidades Adicionales (Layout/Spacing) ─────────────── */
+.mt-2 { margin-top: 8px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.mb-8 { margin-bottom: 32px; }
+
+.p-4 { padding: 16px; }
+.p-5 { padding: 20px; }
+.p-6 { padding: 24px; }
+.py-4 { padding-top: 16px; padding-bottom: 16px; }
+.py-8 { padding-top: 32px; padding-bottom: 32px; }
+.py-12 { padding-top: 48px; padding-bottom: 48px; }
+
+.font-bold { font-weight: 700; }
+.text-white { color: #ffffff; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.uppercase { text-transform: uppercase; }
+.tracking-widest { letter-spacing: 0.1em; }
+
+.items-start { align-items: flex-start; }
+.justify-center { justify-content: center; }
+.flex-center { display: flex; align-items: center; justify-content: center; }

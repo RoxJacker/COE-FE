@@ -8,8 +8,10 @@ export const useSocket = () => {
   const initSocket = () => {
     if (socket) return // Ya está inicializado
 
-    // El proxy de Vite en vite.config.js maneja la ruta /socket.io automáticamente
-    socket = io()
+    // El proxy de Vite en vite.config.js maneja la ruta /socket.io automáticamente en dev.
+    // En producción se usa la variable de entorno VITE_SOCKET_URL.
+    const url = import.meta.env.VITE_SOCKET_URL || ''
+    socket = io(url)
 
     socket.on('connect', () => {
       console.log('🔌 Conectado al servidor Socket.io')

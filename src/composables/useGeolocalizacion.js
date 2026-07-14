@@ -1,11 +1,15 @@
 import { ref, onUnmounted } from 'vue'
 
+// Intervalo de throttle en ms — emite al servidor cada 20 segundos
+const GPS_THROTTLE_MS = 20000
+
 export const useGeolocalizacion = () => {
   const rastreando = ref(false)
   const latitud = ref(null)
   const longitud = ref(null)
   const error = ref(null)
   let watchId = null
+  let ultimaEmision = 0 // timestamp de la última vez que se llamó al callback
 
   const iniciarRastreo = (onUpdateCallback) => {
     if (!('geolocation' in navigator)) {
@@ -26,7 +30,11 @@ export const useGeolocalizacion = () => {
         longitud.value = lng
         error.value = null
 
-        if (onUpdateCallback) {
+        // Throttle: solo invocar el callback (que emite por socket y escribe en BD)
+        // cada GPS_THROTTLE_MS milisegundos para no saturar el servidor
+        const ahora = Date.now()
+        if (onUpdateCallback && (ahora - ultimaEmision) >= GPS_THROTTLE_MS) {
+          ultimaEmision = ahora
           onUpdateCallback({ lat, lng })
         }
       },
@@ -48,8 +56,8 @@ export const useGeolocalizacion = () => {
       },
       {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        timeout: 15000,
+        maximumAge: 10000, // Aceptar posición cacheada de hasta 10s para ahorrar batería
       }
     )
   }

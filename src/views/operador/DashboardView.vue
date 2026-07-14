@@ -22,6 +22,8 @@ const stats = ref({
   tacticos: {
     tiempoDespacho: 0,
     tiempoDespachoTrend: 0,
+    tiempoRespuesta: 0,
+    tiempoRespuestaTrend: 0,
     emergenciasHoy: 0,
     emergenciasTrend: 0,
     flota: { total: 0, disponibles: 0, porcentaje: 0 },
@@ -210,7 +212,7 @@ const exportarReporte = () => {
       <!-- Fila 1: KPIs Principales -->
       <div class="kpi-grid mb-6">
         
-        <!-- KPI 1: TPR -->
+        <!-- KPI 1: Tiempo Promedio Despacho -->
         <div class="t-card kpi-card">
           <div class="t-card-header flex justify-between">
             <span>TIEMPO PROM. DESPACHO</span>
@@ -220,6 +222,20 @@ const exportarReporte = () => {
             <div class="t-value">{{ stats.tacticos.tiempoDespacho.toFixed(2) }} <span class="t-unit">min</span></div>
             <div class="t-trend" :class="tendenciaClase(stats.tacticos.tiempoDespachoTrend, true)">
               {{ formatearTendencia(stats.tacticos.tiempoDespachoTrend) }} VS AYER
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 1b: Tiempo Real de Respuesta (TPR) -->
+        <div class="t-card kpi-card">
+          <div class="t-card-header flex justify-between">
+            <span>TIEMPO RESPUESTA REAL (TPR)</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" class="text-muted"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+          </div>
+          <div class="t-card-body">
+            <div class="t-value">{{ stats.tacticos.tiempoRespuesta ? stats.tacticos.tiempoRespuesta.toFixed(2) : '0.00' }} <span class="t-unit">min</span></div>
+            <div class="t-trend" :class="tendenciaClase(stats.tacticos.tiempoRespuestaTrend, true)">
+              {{ formatearTendencia(stats.tacticos.tiempoRespuestaTrend) }} VS AYER
             </div>
           </div>
         </div>

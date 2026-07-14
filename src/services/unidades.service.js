@@ -21,8 +21,18 @@ export const unidadesService = {
     return data
   },
 
+  async actualizar(id, payload) {
+    const { data } = await api.put(`/unidades/${id}`, payload)
+    return data
+  },
+
   async actualizarEstado(id, estado) {
     const { data } = await api.patch(`/unidades/${id}/estado`, { estado })
+    return data
+  },
+
+  async eliminar(id) {
+    const { data } = await api.delete(`/unidades/${id}`)
     return data
   },
 }

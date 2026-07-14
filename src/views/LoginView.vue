@@ -283,20 +283,27 @@ const placeholderEmail = {
   text-align: center;
 }
 
-/* ── Panel derecho (formulario) ──────────────────────────── */
+/* ── Panel derecho (formulario con fondo de imagen) ──────── */
 .login-panel-der {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 24px;
-  background: var(--bg-surface);
+  background: linear-gradient(rgba(13, 10, 10, 0.75), rgba(13, 10, 10, 0.75)), url('@/assets/login-bg.jpg') no-repeat center center;
+  background-size: cover;
 }
 
 .login-form-wrap {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   animation: fadeIn 0.4s ease;
+  background: rgba(26, 18, 18, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--borde);
+  padding: 36px;
+  border-radius: var(--radio-lg);
+  box-shadow: var(--sombra-lg);
 }
 
 .login-encabezado {

@@ -37,12 +37,12 @@ const cargarDatos = async () => {
   if (!auth.usuario?.unidadAsignada) return
   cargando.value = true
   try {
-    // 1. Obtener detalles de la unidad
-    const resUnidad = await api.get(`/api/unidades/${auth.usuario.unidadAsignada}`)
+    // 1. Obtener detalles de la unidad (baseURL en api.js ya incluye /api)
+    const resUnidad = await api.get(`/unidades/${auth.usuario.unidadAsignada}`)
     unidadInfo.value = resUnidad.data
 
     // 2. Buscar si tiene emergencia activa asignada
-    const resEmergencias = await api.get('/api/emergencias/activas')
+    const resEmergencias = await api.get('/emergencias/activas')
     const asignada = resEmergencias.data.find(
       (e) => e.unidadAsignada?._id === auth.usuario.unidadAsignada
     )
@@ -64,12 +64,13 @@ const cambiarEstado = async (nuevoEstado) => {
   }
 
   try {
-    const res = await api.patch(`/api/unidades/${auth.usuario.unidadAsignada}/estado`, {
+    // 1. Actualizar el estado de la unidad
+    const res = await api.patch(`/unidades/${auth.usuario.unidadAsignada}/estado`, {
       estado: nuevoEstado
     })
     unidadInfo.value = res.data
 
-    // Emitir por Sockets para que los operadores se enteren de inmediato
+    // 2. Emitir por Socket para que los operadores se enteren de inmediato
     if (socket) {
       socket.emit('unidad:estado', {
         unidadId: auth.usuario.unidadAsignada,
@@ -77,12 +78,47 @@ const cambiarEstado = async (nuevoEstado) => {
       })
     }
 
-    // Si pasamos a disponible o regresando, recargar para ver si ya nos quitaron el incidente
+    // 3. Si llegamos a escena, registrar tiempoEscena en la emergencia (KPI TPR)
+    //    y cambiar el estado de la emergencia a en_atencion
+    if (nuevoEstado === 'en_escena' && emergenciaAsignada.value?._id) {
+      try {
+        const resEm = await api.patch(`/emergencias/${emergenciaAsignada.value._id}/estado`, {
+          estado: 'en_atencion'
+        })
+        emergenciaAsignada.value = resEm.data
+      } catch (emErr) {
+        console.warn('No se pudo actualizar el estado de la emergencia a en_atencion:', emErr)
+      }
+    }
+
+    // 4. Si regresamos o quedamos disponibles, recargar datos frescos del servidor
     if (nuevoEstado === 'disponible' || nuevoEstado === 'regresando') {
       await cargarDatos()
     }
   } catch (e) {
     console.error('Error al cambiar de estado:', e)
+  }
+}
+
+// Finalizar la emergencia desde la unidad de campo
+const finalizarServicio = async () => {
+  if (!emergenciaAsignada.value?._id) return
+  
+  if ('vibrate' in navigator) {
+    navigator.vibrate([40, 40, 40])
+  }
+  
+  try {
+    cargando.value = true
+    await api.patch(`/emergencias/${emergenciaAsignada.value._id}/estado`, {
+      estado: 'cerrado'
+    })
+    emergenciaAsignada.value = null
+    await cargarDatos()
+  } catch (e) {
+    console.error('Error al finalizar el servicio:', e)
+  } finally {
+    cargando.value = false
   }
 }
 
@@ -197,6 +233,18 @@ onUnmounted(() => {
         </svg>
         Navegar con Google Maps
       </a>
+
+      <!-- Botón para finalizar servicio desde el campo -->
+      <button 
+        v-if="estadoActual === 'en_escena'" 
+        @click="finalizarServicio" 
+        class="btn btn-cerrar w-full text-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="18" height="18">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Finalizar y Cerrar Servicio
+      </button>
     </div>
 
     <div class="emergencia-card-vacia blur-effect text-center" v-else>
@@ -506,5 +554,25 @@ onUnmounted(() => {
   background: rgba(99, 102, 241, 0.08);
   color: #6366f1;
   transform: scale(0.97);
+}
+
+.btn-cerrar {
+  background: #dc2626;
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid #2d1f1f;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all var(--trans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.btn-cerrar:hover {
+  background: #b91c1c;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
 }
 </style>
